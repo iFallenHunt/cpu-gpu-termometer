@@ -4,5 +4,6 @@
   "description": "Display CPU and GPU temperature in the top panel",
   "shell-version": ["42", "43", "44", "45", "46", "47", "48", "49"],
   "url": "https://github.com/iFallenHunt/cpu-gpu-termometer",
-  "version": 1
+  "version": 1,
+  "version-name": "1.0.0"
 }
