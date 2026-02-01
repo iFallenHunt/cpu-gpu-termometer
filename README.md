@@ -9,7 +9,7 @@ GNOME Shell extension that displays CPU and GPU temperature in the top panel of 
   - **Green** (below 45°C) — Cool
   - **Orange** (46°C–59°C) — Warm
   - **Red** (60°C and above) — Hot
-- **Compact layout** — Displays as `CPU: XX°C | GPU: XX°C` in the status area
+- **Compact layout** — Displays as `CPU: XX°C  GPU: XX°C` in the status area
 - **No external dependencies** — Reads directly from Linux sysfs (thermal zones, hwmon)
 
 ## Supported Hardware
