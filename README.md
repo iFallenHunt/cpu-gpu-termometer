@@ -24,4 +24,4 @@ GNOME Shell extension that displays CPU and GPU temperature in the top panel of 
 
 ## Compatible GNOME Versions
 
-GNOME Shell 42, 43, 44 and 45.
+GNOME Shell 42, 43, 44, 45, 46, 47, 48 and 49.
