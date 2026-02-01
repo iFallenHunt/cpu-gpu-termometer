@@ -4,7 +4,8 @@ GNOME Shell extension that displays CPU and GPU temperature in the top panel of 
 
 ## Screenshot
 
-<img src="..." alt="Preview" width="206" height="40" />
+<img width="206" height="40" alt="image" src="https://github.com/user-attachments/assets/09bb598e-338f-4c72-bb7e-f084e59ddc9b" />
+
 
 ## Features
 
