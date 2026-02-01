@@ -4,7 +4,7 @@
 
 set -e
 
-EXT_UUID="cpu-gpu-temp"
+EXT_UUID="cpu-gpu-temp@iFallenHunt"
 EXT_DIR="$(cd "$(dirname "$0")" && pwd)"
 TARGET_DIR="$HOME/.local/share/gnome-shell/extensions"
 
