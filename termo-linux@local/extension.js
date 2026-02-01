@@ -28,8 +28,7 @@ function readFile(path) {
 /**
  * Read CPU temp from thermal zones or hwmon (k10temp/coretemp)
  */
-function readCpuTemp() {
-    // Try thermal zones first
+function readCpuTemp() {    
     try {
         const thermalDir = Gio.file_new_for_path('/sys/class/thermal');
         if (!thermalDir.query_exists(null)) return null;
@@ -51,7 +50,6 @@ function readCpuTemp() {
 
                 const temp = Math.floor(parseInt(tempStr, 10) / 1000);
                 if (temp > 0 && temp < 150) {
-                    // Only return known CPU thermal zone types (others may be GPU, chipset, etc.)
                     if (type === 'x86_pkg_temp' || type === 'Tctl' || type === 'k10temp') {
                         return temp;
                     }
@@ -60,7 +58,6 @@ function readCpuTemp() {
         }
     } catch (e) {}
 
-    // Fallback: hwmon (k10temp=AMD, coretemp=Intel)
     try {
         const hwmonDir = Gio.file_new_for_path('/sys/class/hwmon');
         if (!hwmonDir.query_exists(null)) return null;
@@ -135,7 +132,6 @@ function readTempFromHwmon(basePath) {
  * Read GPU temp from hwmon (AMD/Intel via DRM, NVIDIA via hwmon)
  */
 function readGpuTemp() {
-    // AMD/Intel: via DRM card device hwmon
     try {
         const drmDir = Gio.file_new_for_path('/sys/class/drm');
         if (drmDir.query_exists(null)) {
@@ -173,7 +169,6 @@ function readGpuTemp() {
         }
     } catch (e) {}
 
-    // NVIDIA: direct hwmon (nvidia or nouveau driver)
     try {
         const hwmonDir = Gio.file_new_for_path('/sys/class/hwmon');
         if (!hwmonDir.query_exists(null)) return null;
@@ -273,13 +268,14 @@ class TermoExtension {
     enable() {
         this._indicator = new PanelMenu.Button(0.0, Me.metadata.name, false);
 
-        // Layout: [CPU dot] [CPU: XX°C] | [GPU dot] [GPU: XX°C]
+        const initialResult = formatTemperatures();
+        this._hasGpu = initialResult.gpu !== null;
+
         const box = new St.BoxLayout({
             style_class: 'termo-container',
             vertical: false
         });
 
-        // CPU circle - drawn with Cairo for perfect circle
         const cpuDotObj = createTempDot();
         this._cpuDot = cpuDotObj.widget;
 
@@ -289,20 +285,31 @@ class TermoExtension {
             y_align: Clutter.ActorAlign.CENTER
         });
 
-        // GPU circle - drawn with Cairo for perfect circle
-        const gpuDotObj = createTempDot();
-        this._gpuDot = gpuDotObj.widget;
-
-        this._gpuLabel = new St.Label({
-            text: '---',
-            style_class: 'termo-label',
-            y_align: Clutter.ActorAlign.CENTER
-        });
-
         box.add_child(this._cpuDot);
         box.add_child(this._cpuLabel);
-        box.add_child(this._gpuDot);
-        box.add_child(this._gpuLabel);
+
+        let gpuDotObj = null;
+        if (this._hasGpu) {
+            const separator = new St.Label({
+                text: ' | ',
+                style_class: 'termo-label',
+                y_align: Clutter.ActorAlign.CENTER
+            });
+            gpuDotObj = createTempDot();
+            this._gpuDot = gpuDotObj.widget;
+            this._gpuLabel = new St.Label({
+                text: '---',
+                style_class: 'termo-label',
+                y_align: Clutter.ActorAlign.CENTER
+            });
+            box.add_child(separator);
+            box.add_child(this._gpuDot);
+            box.add_child(this._gpuLabel);
+        } else {
+            this._gpuDot = null;
+            this._gpuLabel = null;
+        }
+
         this._indicator.add_child(box);
 
         Main.panel.addToStatusArea(Me.metadata.uuid, this._indicator);
@@ -311,12 +318,14 @@ class TermoExtension {
         const update = () => {
             const result = formatTemperatures();
             self._cpuLabel.set_text(result.cpuText);
-            self._gpuLabel.set_text(result.gpuText);
             cpuDotObj.setTemp(result.cpu);
-            gpuDotObj.setTemp(result.gpu);
+            if (self._hasGpu && gpuDotObj) {
+                self._gpuLabel.set_text(result.gpuText);
+                gpuDotObj.setTemp(result.gpu);
+            }
             return GLib.SOURCE_CONTINUE;
         };
-        update(); // initial update
+        update(); 
         this._timeoutId = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 2, update);
     }
 
