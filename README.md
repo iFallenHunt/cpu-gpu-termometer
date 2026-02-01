@@ -1,4 +1,4 @@
-# Termo Linux - GNOME Extension
+# CPU GPU Temp - GNOME Extension
 
 GNOME Shell extension that displays CPU and GPU temperature in the top panel of GNOME/Pop!_OS.
 
