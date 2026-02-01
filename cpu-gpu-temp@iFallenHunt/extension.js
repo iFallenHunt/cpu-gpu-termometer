@@ -289,12 +289,7 @@ class TermoExtension {
         box.add_child(this._cpuLabel);
 
         let gpuDotObj = null;
-        if (this._hasGpu) {
-            const separator = new St.Label({
-                text: ' | ',
-                style_class: 'termo-label',
-                y_align: Clutter.ActorAlign.CENTER
-            });
+        if (this._hasGpu) {            
             gpuDotObj = createTempDot();
             this._gpuDot = gpuDotObj.widget;
             this._gpuLabel = new St.Label({
@@ -302,7 +297,6 @@ class TermoExtension {
                 style_class: 'termo-label',
                 y_align: Clutter.ActorAlign.CENTER
             });
-            box.add_child(separator);
             box.add_child(this._gpuDot);
             box.add_child(this._gpuLabel);
         } else {
