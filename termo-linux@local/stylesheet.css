@@ -1,0 +1,28 @@
+/* Temperature indicator: colored dots + white bold text */
+
+.termo-container {
+    spacing: 6px;
+    /* Equal top/bottom padding to center vertically in the panel */
+    padding: 6px 4px;
+}
+
+/* Wrapper for Cairo-drawn circle (St.DrawingArea) */
+.termo-dot-wrapper {
+    width: 10px;
+    height: 10px;
+    min-width: 10px;
+    min-height: 10px;
+    max-width: 10px;
+    max-height: 10px;
+    flex-shrink: 0;
+    /* Nudge down to align with text baseline/center */
+    margin-top: 1px;
+}
+
+/* White bold text for temperature labels */
+.termo-label {
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 14px;
+    padding: 0 4px;
+}
