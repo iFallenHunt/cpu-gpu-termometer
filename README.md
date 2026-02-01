@@ -2,6 +2,10 @@
 
 GNOME Shell extension that displays CPU and GPU temperature in the top panel of GNOME/Pop!_OS.
 
+## Screenshot
+
+<img src="..." alt="Preview" width="206" height="40" />
+
 ## Features
 
 - **Real-time monitoring** — CPU and GPU temperatures update every 2 seconds
